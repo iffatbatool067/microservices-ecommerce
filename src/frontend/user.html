@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopZone - User Service</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent2: #0f3460;
+    --light: #f5f5f5;
+    --white: #ffffff;
+    --gray: #888;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--primary); }
+
+  /* NAV */
+  nav {
+    background: var(--primary);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--white); letter-spacing: -1px; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: #ccc; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* PAGE HEADER */
+  .page-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%);
+    padding: 3rem 2rem;
+    text-align: center;
+    color: white;
+  }
+  .service-badge {
+    display: inline-block;
+    background: rgba(233,69,96,0.2);
+    border: 1px solid rgba(233,69,96,0.4);
+    color: #ff8fa3;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .page-header h1 { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .page-header p { color: #aab4be; font-size: 1rem; }
+
+  /* MAIN CONTENT */
+  .main { max-width: 1000px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+
+  /* TABS */
+  .auth-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .tabs { display: flex; border-bottom: 1px solid #eee; }
+  .tab {
+    flex: 1;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--gray);
+    transition: all 0.2s;
+    border: none;
+    background: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+  .tab-content { padding: 2rem; display: none; }
+  .tab-content.active { display: block; }
+
+  /* FORM */
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--primary); margin-bottom: 0.4rem; }
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    transition: border 0.2s;
+    outline: none;
+  }
+  .form-group input:focus { border-color: var(--accent); }
+  .form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    background: white;
+  }
+  .btn-submit {
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.85rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    margin-top: 0.5rem;
+  }
+  .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+  .divider { text-align: center; color: var(--gray); font-size: 0.85rem; margin: 1rem 0; position: relative; }
+  .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: #eee; }
+  .divider::before { left: 0; }
+  .divider::after { right: 0; }
+  .forgot { text-align: right; font-size: 0.82rem; color: var(--accent); cursor: pointer; margin-top: -0.8rem; margin-bottom: 1rem; }
+  .success-msg { background: #f0fff4; border: 1px solid #68d391; color: #276749; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.9rem; margin-bottom: 1rem; display: none; }
+
+  /* INFO PANEL */
+  .info-panel { display: flex; flex-direction: column; gap: 1.2rem; }
+  .info-card {
+    background: white;
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .info-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+  .info-card ul { list-style: none; }
+  .info-card ul li { font-size: 0.88rem; color: var(--gray); padding: 0.35rem 0; border-bottom: 1px solid #f5f5f5; display: flex; align-items: center; gap: 0.5rem; }
+  .info-card ul li:last-child { border: none; }
+  .check { color: #48bb78; font-weight: 700; }
+
+  /* API SECTION */
+  .api-section { max-width: 1000px; margin: 0 auto 3rem; padding: 0 2rem; }
+  .api-card {
+    background: var(--primary);
+    border-radius: 14px;
+    padding: 2rem;
+    color: white;
+  }
+  .api-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.2rem; }
+  .api-endpoints { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .endpoint {
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .method { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; }
+  .get { background: #48bb78; color: white; }
+  .post { background: #4299e1; color: white; }
+  .put { background: #ed8936; color: white; }
+  .delete { background: #f56565; color: white; }
+  .endpoint-path { font-size: 0.85rem; color: #e2e8f0; font-family: monospace; margin-bottom: 0.3rem; }
+  .endpoint-desc { font-size: 0.78rem; color: #a0aec0; }
+
+  /* PROFILE SECTION */
+  .profile-section { max-width: 1000px; margin: 0 auto 3rem; padding: 0 2rem; }
+  .profile-card {
+    background: white;
+    border-radius: 14px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    color: white;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .profile-info h3 { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; }
+  .profile-info p { color: var(--gray); font-size: 0.9rem; margin-top: 0.2rem; }
+  .profile-stats { display: flex; gap: 2rem; margin-top: 1rem; }
+  .pstat { text-align: center; }
+  .pstat-num { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+  .pstat-label { font-size: 0.78rem; color: var(--gray); }
+  .jwt-badge {
+    margin-left: auto;
+    background: #f0fff4;
+    border: 1px solid #68d391;
+    color: #276749;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  footer {
+    background: #111;
+    color: #aaa;
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.85rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 700px) {
+    .main { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Shop<span>Zone</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="orders.html">Orders</a></li>
+    <li><a href="notifications.html">Notifications</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="service-badge">👤 User Microservice</div>
+  <h1>User Service</h1>
+  <p>Handles registration, login, profiles & JWT authentication</p>
+</div>
+
+<!-- SAMPLE PROFILE -->
+<div class="profile-section" style="margin-top: 2rem;">
+  <div class="profile-card">
+    <div class="avatar">IB</div>
+    <div class="profile-info">
+      <h3>Iffat Batool</h3>
+      <p>iffat@shopzone.com &nbsp;|&nbsp; Member since 2024</p>
+      <div class="profile-stats">
+        <div class="pstat"><div class="pstat-num">12</div><div class="pstat-label">Orders</div></div>
+        <div class="pstat"><div class="pstat-num">3</div><div class="pstat-label">Wishlist</div></div>
+        <div class="pstat"><div class="pstat-num">Gold</div><div class="pstat-label">Tier</div></div>
+      </div>
+    </div>
+    <div class="jwt-badge">✅ JWT Authenticated</div>
+  </div>
+</div>
+
+<!-- AUTH FORMS -->
+<div class="main">
+  <div class="auth-card">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('login')">Login</button>
+      <button class="tab" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="tab-content active" id="login">
+      <div class="success-msg" id="login-success">✅ Login successful! Redirecting...</div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@example.com" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" placeholder="Enter your password" />
+      </div>
+      <div class="forgot">Forgot password?</div>
+      <button class="btn-submit" onclick="showSuccess('login-success')">Login</button>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="tab-content" id="register">
+      <div class="success-msg" id="reg-success">✅ Account created! Please login.</div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Your full name" />
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@example.com" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" placeholder="Min 8 characters" />
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <select>
+          <option>Customer</option>
+          <option>Seller</option>
+          <option>Admin</option>
+        </select>
+      </div>
+      <button class="btn-submit" onclick="showSuccess('reg-success')">Create Account</button>
+    </div>
+  </div>
+
+  <!-- INFO PANEL -->
+  <div class="info-panel">
+    <div class="info-card">
+      <h3>🔐 Authentication Features</h3>
+      <ul>
+        <li><span class="check">✓</span> JWT Token Based Auth</li>
+        <li><span class="check">✓</span> Secure Password Hashing (bcrypt)</li>
+        <li><span class="check">✓</span> Role Based Access Control</li>
+        <li><span class="check">✓</span> Token Refresh Mechanism</li>
+        <li><span class="check">✓</span> Session Management</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>🐳 Docker & Deployment</h3>
+      <ul>
+        <li><span class="check">✓</span> Containerized with Docker</li>
+        <li><span class="check">✓</span> Kubernetes Deployment Ready</li>
+        <li><span class="check">✓</span> Environment: Development</li>
+        <li><span class="check">✓</span> Port: 3001</li>
+        <li><span class="check">✓</span> Health Check Endpoint Active</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>📊 Service Status</h3>
+      <ul>
+        <li><span class="check">✓</span> Service: <strong>Running</strong></li>
+        <li><span class="check">✓</span> Database: Connected</li>
+        <li><span class="check">✓</span> Total Users: 1,204</li>
+        <li><span class="check">✓</span> Active Sessions: 87</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- API ENDPOINTS -->
+<div class="api-section">
+  <div class="api-card">
+    <h3>🔌 REST API Endpoints — User Service</h3>
+    <div class="api-endpoints">
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <div class="endpoint-path">/api/users/register</div>
+        <div class="endpoint-desc">Register new user account</div>
+      </div>
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <div class="endpoint-path">/api/users/login</div>
+        <div class="endpoint-desc">Login and get JWT token</div>
+      </div>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <div class="endpoint-path">/api/users/profile</div>
+        <div class="endpoint-desc">Get current user profile</div>
+      </div>
+      <div class="endpoint">
+        <span class="method put">PUT</span>
+        <div class="endpoint-path">/api/users/profile</div>
+        <div class="endpoint-desc">Update user profile</div>
+      </div>
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <div class="endpoint-path">/api/users/refresh</div>
+        <div class="endpoint-desc">Refresh JWT token</div>
+      </div>
+      <div class="endpoint">
+        <span class="method delete">DELETE</span>
+        <div class="endpoint-path">/api/users/:id</div>
+        <div class="endpoint-desc">Delete user account</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>ShopZone &copy; 2024 — User Microservice | Port: 3001</p>
+  <p style="margin-top:0.5rem;"><a href="index.html">← Back to Home</a> | <a href="https://github.com/iffatbatool067/microservices-ecommerce">GitHub Repo</a></p>
+</footer>
+
+<script>
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    event.target.classList.add('active');
+  }
+  function showSuccess(id) {
+    const el = document.getElementById(id);
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 3000);
+  }
+</script>
+</body>
+</html>

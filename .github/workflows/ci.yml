@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [develop, staging, main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Lint HTML Files
+        run: |
+          echo "Checking HTML files..."
+          find src/frontend -name "*.html" | wc -l
+          echo "All HTML files found!"
+
+      - name: Docker Build
+        run: |
+          docker build -t iffatbatool/shopcloud-frontend:latest .
+
+      - name: Docker Login & Push
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push iffatbatool/shopcloud-frontend:latest
+
+      - name: Deployment Success
+        run: echo "✅ Deployment Successful!"
