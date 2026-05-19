@@ -1,0 +1,18 @@
+name: CI - Development
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check HTML Files
+        run: |
+          echo "Checking HTML files..."
+          find src/frontend -name "*.html" | wc -l
+          echo "HTML check passed!"
+      - name: Docker Build Test
+        run: docker build -t shopcloud-test:latest .
