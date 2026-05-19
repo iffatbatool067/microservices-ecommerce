@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CloudMart | Microservices DevOps Project</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f6f8fb;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #0f172a;
+    }
+
+    .logo span {
+      color: #2563eb;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #374151;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .nav-links a:hover {
+      color: #2563eb;
+    }
+
+    .hero {
+      padding: 90px 0;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      color: white;
+    }
+
+    .hero-content {
+      max-width: 720px;
+    }
+
+    .hero small {
+      color: #93c5fd;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: 52px;
+      line-height: 1.1;
+      margin: 15px 0 20px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #dbeafe;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      padding: 13px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    .section {
+      padding: 70px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title small {
+      color: #2563eb;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .section-title h2 {
+      font-size: 36px;
+      color: #0f172a;
+      margin-top: 10px;
+    }
+
+    .section-title p {
+      max-width: 650px;
+      margin: 10px auto 0;
+      color: #64748b;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 28px;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 35px rgba(15, 23, 42, 0.10);
+    }
+
+    .card h3 {
+      color: #0f172a;
+      font-size: 21px;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      color: #64748b;
+      font-size: 15px;
+    }
+
+    .about {
+      background: white;
+    }
+
+    .about-box {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 35px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .about-box h2 {
+      color: #0f172a;
+      font-size: 32px;
+      margin-bottom: 15px;
+    }
+
+    .about-box p {
+      color: #64748b;
+      margin-bottom: 18px;
+    }
+
+    .features {
+      list-style: none;
+    }
+
+    .features li {
+      padding: 10px 0;
+      border-bottom: 1px solid #e5e7eb;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .features li:last-child {
+      border-bottom: none;
+    }
+
+    .stack {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .stack span {
+      background: white;
+      border: 1px solid #e5e7eb;
+      color: #0f172a;
+      padding: 12px 18px;
+      border-radius: 30px;
+      font-weight: bold;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    footer {
+      background: #0f172a;
+      color: #cbd5e1;
+      text-align: center;
+      padding: 25px;
+    }
+
+    footer strong {
+      color: white;
+    }
+
+    @media (max-width: 900px) {
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-box {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 40px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        height: auto;
+        padding: 18px 0;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .nav-links {
+        gap: 14px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .hero {
+        padding: 65px 0;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title h2 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">Cloud<span>Mart</span></div>
+
+        <ul class="nav-links">
+          <li><a href="#services">Services</a></li>
+          <li><a href="#about">Project</a></li>
+          <li><a href="#stack">Stack</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <small>Cloud Native DevOps Project</small>
+        <h1>E-Commerce Microservices Platform</h1>
+        <p>
+          A simple and professional frontend dashboard for an e-commerce
+          platform built with microservices, Docker, Kubernetes, and CI/CD automation.
+        </p>
+        <a href="#services" class="btn">View Services</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="section">
+    <div class="container">
+      <div class="section-title">
+        <small>Core Modules</small>
+        <h2>Microservices</h2>
+        <p>
+          The platform is divided into four main services to keep the system clean,
+          scalable, and easy to deploy.
+        </p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <h3>User Service</h3>
+          <p>
+            Manages user registration, login, profiles, and authentication.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Product Service</h3>
+          <p>
+            Handles product catalog, product details, and inventory information.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Order Service</h3>
+          <p>
+            Processes customer orders and manages order status.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Notification Service</h3>
+          <p>
+            Sends order confirmations, alerts, and system notifications.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section about">
+    <div class="container">
+      <div class="about-box">
+        <div>
+          <h2>Project Overview</h2>
+          <p>
+            CloudMart represents a cloud-native e-commerce system designed using
+            DevOps practices. The website is containerized with Docker and deployed
+            through an automated CI/CD workflow.
+          </p>
+          <p>
+            The main goal is to demonstrate service-based architecture,
+            environment separation, and automated deployment.
+          </p>
+        </div>
+
+        <ul class="features">
+          <li>Docker based containerization</li>
+          <li>Kubernetes deployment support</li>
+          <li>Jenkins CI/CD pipeline</li>
+          <li>Development, staging, and production environments</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack" class="section">
+    <div class="container">
+      <div class="section-title">
+        <small>Technology</small>
+        <h2>DevOps Stack</h2>
+        <p>
+          Tools used to build, test, containerize, and deploy the project.
+        </p>
+      </div>
+
+      <div class="stack">
+        <span>HTML</span>
+        <span>CSS</span>
+        <span>GitHub</span>
+        <span>Docker</span>
+        <span>Kubernetes</span>
+        <span>Jenkins</span>
+        <span>CI/CD</span>
+        <span>Render</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>CloudMart</strong> | Microservices DevOps Project</p>
+    <p>COMSATS University Islamabad, Lahore Campus</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopZone - Product Service</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --primary: #1a1a2e; --accent: #e94560; --accent2: #0f3460; --light: #f5f5f5; --white: #ffffff; --gray: #888; --shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--primary); }
+  nav { background: var(--primary); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--white); }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: #ccc; text-decoration: none; font-size: 0.95rem; }
+  .nav-links a:hover { color: var(--accent); }
+  .page-header { background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%); padding: 3rem 2rem; text-align: center; color: white; }
+  .page-header h1 { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .page-header p { color: #aab4be; }
+  .service-badge { display: inline-block; background: rgba(233,69,96,0.2); border: 1px solid rgba(233,69,96,0.4); color: #ff8fa3; padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.8rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+  .section { max-width: 1100px; margin: 2rem auto; padding: 0 2rem; }
+  .filters { background: white; border-radius: 12px; padding: 1.2rem 1.5rem; box-shadow: var(--shadow); display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 2rem; }
+  .filters input { flex: 1; padding: 0.6rem 1rem; border: 1px solid #ddd; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; min-width: 180px; }
+  .filters input:focus { border-color: var(--accent); }
+  .filters select { padding: 0.6rem 1rem; border: 1px solid #ddd; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; background: white; cursor: pointer; }
+  .btn-filter { background: var(--accent); color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; cursor: pointer; font-weight: 500; }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; }
+  .product-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #eee; transition: transform 0.2s; }
+  .product-card:hover { transform: translateY(-4px); }
+  .product-img { height: 170px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+  .bg1{background:#fff0f3;} .bg2{background:#f0f7ff;} .bg3{background:#f0fff4;} .bg4{background:#fff8f0;} .bg5{background:#f5f0ff;} .bg6{background:#f0ffff;}
+  .product-info { padding: 1.2rem; }
+  .product-info h4 { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.3rem; }
+  .product-category { font-size: 0.75rem; color: var(--gray); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  .product-price { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
+  .product-old { text-decoration: line-through; color: var(--gray); font-size: 0.85rem; margin-left: 0.4rem; }
+  .stock-badge { display: inline-block; font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-bottom: 0.8rem; font-weight: 500; }
+  .in-stock { background: #f0fff4; color: #276749; }
+  .low-stock { background: #fff8f0; color: #c05621; }
+  .add-cart { width: 100%; background: var(--primary); color: white; border: none; padding: 0.6rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; font-weight: 500; }
+  .add-cart:hover { background: var(--accent); }
+  .api-section { max-width: 1100px; margin: 2rem auto 3rem; padding: 0 2rem; }
+  .api-card { background: var(--primary); border-radius: 14px; padding: 2rem; color: white; }
+  .api-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.2rem; }
+  .api-endpoints { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .endpoint { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 1rem; border: 1px solid rgba(255,255,255,0.1); }
+  .method { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; }
+  .get{background:#48bb78;color:white;} .post{background:#4299e1;color:white;} .put{background:#ed8936;color:white;} .delete{background:#f56565;color:white;}
+  .endpoint-path { font-size: 0.85rem; color: #e2e8f0; font-family: monospace; margin-bottom: 0.3rem; }
+  .endpoint-desc { font-size: 0.78rem; color: #a0aec0; }
+  .stats-bar { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .stat-card { background: white; border-radius: 10px; padding: 1rem 1.5rem; box-shadow: var(--shadow); flex: 1; min-width: 120px; text-align: center; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+  .stat-label { font-size: 0.8rem; color: var(--gray); margin-top: 0.2rem; }
+  footer { background: #111; color: #aaa; text-align: center; padding: 2rem; font-size: 0.85rem; }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Shop<span>Zone</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="user.html">User</a></li>
+    <li><a href="orders.html">Orders</a></li>
+    <li><a href="notifications.html">Notifications</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="service-badge">📦 Product Microservice</div>
+  <h1>Product Service</h1>
+  <p>Manages product catalog, inventory, search and filtering</p>
+</div>
+
+<div class="section">
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-num">120</div><div class="stat-label">Total Products</div></div>
+    <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Categories</div></div>
+    <div class="stat-card"><div class="stat-num">98</div><div class="stat-label">In Stock</div></div>
+    <div class="stat-card"><div class="stat-num">22</div><div class="stat-label">Low Stock</div></div>
+  </div>
+
+  <div class="filters">
+    <input type="text" placeholder="🔍 Search products..." />
+    <select>
+      <option>All Categories</option>
+      <option>Electronics</option>
+      <option>Clothing</option>
+      <option>Accessories</option>
+      <option>Sports</option>
+    </select>
+    <select>
+      <option>Sort by: Default</option>
+      <option>Price: Low to High</option>
+      <option>Price: High to Low</option>
+      <option>Newest First</option>
+    </select>
+    <button class="btn-filter">Apply Filter</button>
+  </div>
+
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-img bg1">👟</div>
+      <div class="product-info">
+        <div class="product-category">Sports</div>
+        <h4>Running Shoes Pro</h4>
+        <div><span class="product-price">$49.99</span><span class="product-old">$79.99</span></div>
+        <div class="stock-badge in-stock">✓ In Stock (45)</div>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img bg2">💻</div>
+      <div class="product-info">
+        <div class="product-category">Electronics</div>
+        <h4>Laptop Sleeve 15"</h4>
+        <div><span class="product-price">$19.99</span><span class="product-old">$29.99</span></div>
+        <div class="stock-badge in-stock">✓ In Stock (120)</div>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img bg3">🎧</div>
+      <div class="product-info">
+        <div class="product-category">Electronics</div>
+        <h4>Wireless Headphones</h4>
+        <div><span class="product-price">$89.99</span><span class="product-old">$129.99</span></div>
+        <div class="stock-badge low-stock">⚠ Low Stock (5)</div>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img bg4">⌚</div>
+      <div class="product-info">
+        <div class="product-category">Accessories</div>
+        <h4>Smart Watch Series 5</h4>
+        <div><span class="product-price">$149.99</span><span class="product-old">$199.99</span></div>
+        <div class="stock-badge in-stock">✓ In Stock (30)</div>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img bg5">👜</div>
+      <div class="product-info">
+        <div class="product-category">Accessories</div>
+        <h4>Leather Handbag</h4>
+        <div><span class="product-price">$59.99</span><span class="product-old">$89.99</span></div>
+        <div class="stock-badge in-stock">✓ In Stock (18)</div>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img bg6">📱</div>
+      <div class="product-info">
+        <div class="product-category">Electronics</div>
+        <h4>Phone Stand Adjustable</h4>
+        <div><span class="product-price">$12.99</span><span class="product-old">$19.99</span></div>
+        <div class="stock-badge low-stock">⚠ Low Stock (3)</div>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="api-section">
+  <div class="api-card">
+    <h3>🔌 REST API Endpoints — Product Service</h3>
+    <div class="api-endpoints">
+      <div class="endpoint"><span class="method get">GET</span><div class="endpoint-path">/api/products</div><div class="endpoint-desc">Get all products</div></div>
+      <div class="endpoint"><span class="method get">GET</span><div class="endpoint-path">/api/products/:id</div><div class="endpoint-desc">Get single product</div></div>
+      <div class="endpoint"><span class="method post">POST</span><div class="endpoint-path">/api/products</div><div class="endpoint-desc">Create new product</div></div>
+      <div class="endpoint"><span class="method put">PUT</span><div class="endpoint-path">/api/products/:id</div><div class="endpoint-desc">Update product</div></div>
+      <div class="endpoint"><span class="method delete">DELETE</span><div class="endpoint-path">/api/products/:id</div><div class="endpoint-desc">Delete product</div></div>
+      <div class="endpoint"><span class="method get">GET</span><div class="endpoint-path">/api/products/search</div><div class="endpoint-desc">Search & filter products</div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>ShopZone &copy; 2024 — Product Microservice | Port: 3002</p>
+  <p style="margin-top:0.5rem;"><a href="index.html">← Back to Home</a> | <a href="https://github.com/iffatbatool067/microservices-ecommerce">GitHub Repo</a></p>
+</footer>
+
+</body>
+</html>
