@@ -1,227 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShopZone - Order Service</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root { --primary: #1a1a2e; --accent: #e94560; --accent2: #0f3460; --light: #f5f5f5; --white: #ffffff; --gray: #888; --shadow: 0 4px 24px rgba(0,0,0,0.08); }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--primary); }
-  nav { background: var(--primary); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-  .logo { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--white); }
-  .logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a { color: #ccc; text-decoration: none; font-size: 0.95rem; }
-  .nav-links a:hover { color: var(--accent); }
-  .page-header { background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%); padding: 3rem 2rem; text-align: center; color: white; }
-  .page-header h1 { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
-  .page-header p { color: #aab4be; }
-  .service-badge { display: inline-block; background: rgba(233,69,96,0.2); border: 1px solid rgba(233,69,96,0.4); color: #ff8fa3; padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.8rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; }
-  .section { max-width: 1100px; margin: 2rem auto; padding: 0 2rem; }
-  .stats-bar { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-  .stat-card { background: white; border-radius: 10px; padding: 1rem 1.5rem; box-shadow: var(--shadow); flex: 1; min-width: 120px; text-align: center; }
-  .stat-num { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--accent); }
-  .stat-label { font-size: 0.8rem; color: var(--gray); margin-top: 0.2rem; }
-  .orders-table-wrap { background: white; border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; margin-bottom: 2rem; }
-  .table-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-  .table-header h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; }
-  .btn-new { background: var(--accent); color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; font-weight: 500; }
-  table { width: 100%; border-collapse: collapse; }
-  th { background: #f9f9f9; padding: 0.8rem 1.2rem; text-align: left; font-size: 0.8rem; color: var(--gray); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-  td { padding: 1rem 1.2rem; border-bottom: 1px solid #f5f5f5; font-size: 0.9rem; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #fafafa; }
-  .status { display: inline-block; padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.78rem; font-weight: 500; }
-  .delivered { background: #f0fff4; color: #276749; }
-  .processing { background: #ebf8ff; color: #2b6cb0; }
-  .shipped { background: #fff8f0; color: #c05621; }
-  .cancelled { background: #fff5f5; color: #c53030; }
-  .order-id { font-family: monospace; font-size: 0.85rem; color: var(--accent2); font-weight: 600; }
-  .place-order { background: white; border-radius: 14px; box-shadow: var(--shadow); padding: 2rem; margin-bottom: 2rem; }
-  .place-order h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .form-group { margin-bottom: 0; }
-  .form-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.4rem; }
-  .form-group input, .form-group select { width: 100%; padding: 0.7rem 1rem; border: 1px solid #ddd; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; background: white; }
-  .form-group input:focus { border-color: var(--accent); }
-  .form-full { grid-column: 1 / -1; }
-  .btn-place { background: var(--accent); color: white; border: none; padding: 0.85rem 2rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; cursor: pointer; margin-top: 1rem; }
-  .btn-place:hover { opacity: 0.9; }
-  .success-msg { background: #f0fff4; border: 1px solid #68d391; color: #276749; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.9rem; margin-top: 1rem; display: none; }
-  .api-section { max-width: 1100px; margin: 0 auto 3rem; padding: 0 2rem; }
-  .api-card { background: var(--primary); border-radius: 14px; padding: 2rem; color: white; }
-  .api-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.2rem; }
-  .api-endpoints { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-  .endpoint { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 1rem; border: 1px solid rgba(255,255,255,0.1); }
-  .method { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; }
-  .get{background:#48bb78;color:white;} .post{background:#4299e1;color:white;} .put{background:#ed8936;color:white;} .delete{background:#f56565;color:white;}
-  .endpoint-path { font-size: 0.85rem; color: #e2e8f0; font-family: monospace; margin-bottom: 0.3rem; }
-  .endpoint-desc { font-size: 0.78rem; color: #a0aec0; }
-  footer { background: #111; color: #aaa; text-align: center; padding: 2rem; font-size: 0.85rem; }
-  footer a { color: var(--accent); text-decoration: none; }
-  @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } table { font-size: 0.8rem; } }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopCloud - Order Service</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; }
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: rgba(10,10,10,0.95);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 60px; border-bottom: 1px solid #222;
+        }
+        .logo { font-size: 26px; font-weight: 800; color: #6c63ff; }
+        .logo span { color: #fff; }
+        .nav-links a { color: #ccc; text-decoration: none; margin-left: 30px; font-size: 15px; }
+        .nav-links a:hover, .nav-links a.active { color: #6c63ff; }
+        .page-hero {
+            padding: 140px 60px 60px;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            text-align: center; border-bottom: 1px solid #222;
+        }
+        .page-hero h1 { font-size: 48px; font-weight: 900; margin-bottom: 15px; }
+        .page-hero h1 span { color: #6c63ff; }
+        .page-hero p { color: #888; font-size: 18px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 70px 40px; }
+        .section-title { font-size: 30px; font-weight: 800; margin-bottom: 8px; }
+        .section-title span { color: #6c63ff; }
+        .section-sub { color: #888; margin-bottom: 35px; font-size: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 60px; }
+        .card {
+            background: #111; border: 1px solid #222; border-radius: 16px;
+            padding: 28px; transition: all 0.3s;
+        }
+        .card:hover { border-color: #6c63ff; transform: translateY(-4px); }
+        .card-icon { font-size: 36px; margin-bottom: 12px; }
+        .card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .card p { color: #888; font-size: 14px; line-height: 1.7; }
+        /* Stats strip */
+        .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 60px; }
+        .stat-card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 24px; text-align: center; }
+        .stat-card h3 { font-size: 32px; font-weight: 800; color: #6c63ff; }
+        .stat-card p { color: #888; font-size: 13px; margin-top: 5px; }
+        /* Table */
+        .table-section { background: #111; border: 1px solid #222; border-radius: 16px; overflow: hidden; margin-bottom: 60px; }
+        .table-header { padding: 20px 25px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+        .table-header h3 { font-size: 17px; font-weight: 700; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #0a0a0a; color: #888; font-size: 12px; text-transform: uppercase; padding: 12px 20px; text-align: left; }
+        td { padding: 14px 20px; border-bottom: 1px solid #1a1a1a; font-size: 14px; color: #ccc; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #151515; }
+        .badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-green { background: rgba(34,197,94,0.15); color: #22c55e; }
+        .badge-yellow { background: rgba(234,179,8,0.15); color: #eab308; }
+        .badge-purple { background: rgba(108,99,255,0.15); color: #6c63ff; }
+        .badge-red { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .badge-blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
+        /* Place order */
+        .order-form-card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 30px; margin-bottom: 60px; }
+        .order-form-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+        .order-form-card h3 span { color: #6c63ff; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: #888; font-size: 13px; margin-bottom: 6px; }
+        .form-group input, .form-group select {
+            width: 100%; background: #0a0a0a; border: 1px solid #333;
+            color: #fff; padding: 11px 14px; border-radius: 8px; font-size: 14px; outline: none;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: #6c63ff; }
+        .form-group select option { background: #111; }
+        .form-btn {
+            background: #6c63ff; color: #fff;
+            padding: 12px 28px; border-radius: 8px; border: none;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+        }
+        .form-btn:hover { opacity: 0.85; }
+        /* Timeline */
+        .timeline-section { background: #111; border: 1px solid #222; border-radius: 16px; padding: 30px; margin-bottom: 60px; }
+        .timeline-section h3 { font-size: 20px; font-weight: 700; margin-bottom: 25px; }
+        .timeline-section h3 span { color: #6c63ff; }
+        .timeline { position: relative; padding-left: 30px; }
+        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: #222; }
+        .timeline-item { position: relative; margin-bottom: 25px; }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-dot { position: absolute; left: -26px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #6c63ff; border: 2px solid #0a0a0a; }
+        .timeline-dot.done { background: #22c55e; }
+        .timeline-dot.pending { background: #eab308; }
+        .timeline-time { color: #555; font-size: 12px; margin-bottom: 4px; }
+        .timeline-label { font-size: 15px; font-weight: 600; }
+        .timeline-desc { color: #888; font-size: 13px; margin-top: 3px; }
+        footer { background: #111; border-top: 1px solid #222; text-align: center; padding: 25px; color: #555; font-size: 14px; }
+        footer span { color: #6c63ff; }
+    </style>
 </head>
 <body>
-
 <nav>
-  <div class="logo">Shop<span>Zone</span></div>
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="user.html">User</a></li>
-    <li><a href="products.html">Products</a></li>
-    <li><a href="notifications.html">Notifications</a></li>
-  </ul>
+    <div class="logo">Shop<span>Cloud</span></div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="user.html">Users</a>
+        <a href="notifications.html">Notifications</a>
+<a href="orders.html">Orders</a>
+<a href="products.html">Products</a>
+    </div>
 </nav>
-
-<div class="page-header">
-  <div class="service-badge">🛒 Order Microservice</div>
-  <h1>Order Service</h1>
-  <p>Processes orders, tracks status and handles transactions</p>
+<div class="page-hero">
+    <h1>Order <span>Service</span></h1>
+    
 </div>
+<div class="container">
 
-<div class="section">
-  <div class="stats-bar">
-    <div class="stat-card"><div class="stat-num">340</div><div class="stat-label">Total Orders</div></div>
-    <div class="stat-card"><div class="stat-num">28</div><div class="stat-label">Processing</div></div>
-    <div class="stat-card"><div class="stat-num">15</div><div class="stat-label">Shipped</div></div>
-    <div class="stat-card"><div class="stat-num">297</div><div class="stat-label">Delivered</div></div>
-  </div>
-
-  <div class="orders-table-wrap">
-    <div class="table-header">
-      <h3>📋 Recent Orders</h3>
-      <button class="btn-new" onclick="document.getElementById('place-form').scrollIntoView({behavior:'smooth'})">+ New Order</button>
+    <h2 class="section-title">Core <span>Features</span></h2>
+    <p class="section-sub">End-to-end order lifecycle with transactional integrity.</p>
+    <div class="grid">
+        <div class="card"><div class="card-icon">🛍️</div><h3>Order Processing</h3><p>Transactional order creation with atomic stock deduction and rollback support.</p></div>
+        <div class="card"><div class="card-icon">📍</div><h3>Status Tracking</h3><p>Real-time order status updates from placement to delivery.</p></div>
+        <div class="card"><div class="card-icon">💳</div><h3>Payment Integration</h3><p>Secure payment gateway integration with success/failure handling.</p></div>
+        <div class="card"><div class="card-icon">🔗</div><h3>Service Communication</h3><p>REST API calls to Product and Notification services for coordinated workflows.</p></div>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Order ID</th>
-          <th>Customer</th>
-          <th>Product</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="order-id">#ORD-1042</span></td>
-          <td>Iffat Batool</td>
-          <td>Wireless Headphones</td>
-          <td>$89.99</td>
-          <td>2024-05-10</td>
-          <td><span class="status delivered">Delivered</span></td>
-        </tr>
-        <tr>
-          <td><span class="order-id">#ORD-1041</span></td>
-          <td>Ali Hassan</td>
-          <td>Smart Watch Series 5</td>
-          <td>$149.99</td>
-          <td>2024-05-09</td>
-          <td><span class="status shipped">Shipped</span></td>
-        </tr>
-        <tr>
-          <td><span class="order-id">#ORD-1040</span></td>
-          <td>Sara Khan</td>
-          <td>Running Shoes Pro</td>
-          <td>$49.99</td>
-          <td>2024-05-08</td>
-          <td><span class="status processing">Processing</span></td>
-        </tr>
-        <tr>
-          <td><span class="order-id">#ORD-1039</span></td>
-          <td>Usman Malik</td>
-          <td>Leather Handbag</td>
-          <td>$59.99</td>
-          <td>2024-05-07</td>
-          <td><span class="status delivered">Delivered</span></td>
-        </tr>
-        <tr>
-          <td><span class="order-id">#ORD-1038</span></td>
-          <td>Fatima Noor</td>
-          <td>Laptop Sleeve 15"</td>
-          <td>$19.99</td>
-          <td>2024-05-06</td>
-          <td><span class="status cancelled">Cancelled</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 
-  <div class="place-order" id="place-form">
-    <h3>🛍️ Place New Order</h3>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Customer Name</label>
-        <input type="text" placeholder="Full name" />
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="you@example.com" />
-      </div>
-      <div class="form-group">
-        <label>Product</label>
-        <select>
-          <option>Running Shoes Pro</option>
-          <option>Wireless Headphones</option>
-          <option>Smart Watch Series 5</option>
-          <option>Laptop Sleeve 15"</option>
-          <option>Leather Handbag</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Quantity</label>
-        <input type="number" placeholder="1" min="1" />
-      </div>
-      <div class="form-group form-full">
-        <label>Shipping Address</label>
-        <input type="text" placeholder="Street, City, Country" />
-      </div>
-      <div class="form-group">
-        <label>Payment Method</label>
-        <select>
-          <option>Credit Card</option>
-          <option>Debit Card</option>
-          <option>JazzCash</option>
-          <option>EasyPaisa</option>
-          <option>Cash on Delivery</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Delivery Type</label>
-        <select>
-          <option>Standard (5-7 days)</option>
-          <option>Express (2-3 days)</option>
-          <option>Same Day</option>
-        </select>
-      </div>
+    <h2 class="section-title">Order <span>Summary</span></h2>
+    <p class="section-sub">Live metrics from the order database.</p>
+    <div class="stats-strip">
+        <div class="stat-card"><h3>3,400+</h3><p>Total Orders</p></div>
+        <div class="stat-card"><h3>2,918</h3><p>Delivered</p></div>
+        <div class="stat-card"><h3>312</h3><p>Processing</p></div>
+        <div class="stat-card"><h3>$84.2K</h3><p>Revenue</p></div>
     </div>
-    <button class="btn-place" onclick="document.getElementById('order-success').style.display='block'; setTimeout(()=>document.getElementById('order-success').style.display='none',3000)">Place Order</button>
-    <div class="success-msg" id="order-success">✅ Order placed successfully! You will receive a confirmation notification.</div>
-  </div>
+
+    <h2 class="section-title">Recent <span>Orders</span></h2>
+    <p class="section-sub">Latest order records from the system.</p>
+    <div class="table-section">
+        <div class="table-header">
+            <h3>🛍️ Order Registry</h3>
+            <span style="color:#888; font-size:13px;">5 recent orders</span>
+        </div>
+        <table>
+            <thead>
+                <tr><th>Order ID</th><th>Customer</th><th>Product</th><th>Amount</th><th>Date</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#O1041</td><td>Usman Tariq</td><td>Wireless Headphones Pro</td><td>$89.99</td><td>May 20, 2025</td>
+                    <td><span class="badge badge-blue">Processing</span></td>
+                </tr>
+                <tr>
+                    <td>#O1040</td><td>Sara Khan</td><td>Running Shoes X200</td><td>$59.99</td><td>May 19, 2025</td>
+                    <td><span class="badge badge-green">Delivered</span></td>
+                </tr>
+                <tr>
+                    <td>#O1039</td><td>Ali Hassan</td><td>Smart Watch Series 5</td><td>$199.99</td><td>May 18, 2025</td>
+                    <td><span class="badge badge-yellow">Shipped</span></td>
+                </tr>
+                <tr>
+                    <td>#O1038</td><td>Iffat Batool</td><td>Mechanical Keyboard TKL</td><td>$129.99</td><td>May 17, 2025</td>
+                    <td><span class="badge badge-green">Delivered</span></td>
+                </tr>
+                <tr>
+                    <td>#O1037</td><td>Usman Tariq</td><td>Cotton T-Shirt (Pack of 3)</td><td>$24.99</td><td>May 16, 2025</td>
+                    <td><span class="badge badge-red">Cancelled</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 class="section-title">Order <span>Timeline</span></h2>
+    <p class="section-sub">Status flow for Order #O1041.</p>
+    <div class="timeline-section">
+        <h3>📍 <span>Tracking: #O1041</span></h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot done"></div>
+                <div class="timeline-time">May 20, 2025 — 09:14 AM</div>
+                <div class="timeline-label">Order Placed</div>
+                <div class="timeline-desc">Order confirmed and payment processed successfully.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot done"></div>
+                <div class="timeline-time">May 20, 2025 — 10:02 AM</div>
+                <div class="timeline-label">Inventory Reserved</div>
+                <div class="timeline-desc">Product Service confirmed stock deduction for Wireless Headphones Pro.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-time">May 20, 2025 — 02:30 PM</div>
+                <div class="timeline-label">Packed & Ready</div>
+                <div class="timeline-desc">Item packed by seller and handed to logistics partner.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot pending"></div>
+                <div class="timeline-time">Est. May 22, 2025</div>
+                <div class="timeline-label">Out for Delivery</div>
+                <div class="timeline-desc">Awaiting dispatch from warehouse.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot pending"></div>
+                <div class="timeline-time">Est. May 23, 2025</div>
+                <div class="timeline-label">Delivered</div>
+                <div class="timeline-desc">Expected delivery to customer address.</div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title">Place New <span>Order</span></h2>
+    <p class="section-sub">Create a new order in the system.</p>
+    <div class="order-form-card">
+        <h3>🛒 <span>New Order Form</span></h3>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Customer</label>
+                <select>
+                    <option>Iffat Batool</option>
+                    <option>Ali Hassan</option>
+                    <option>Sara Khan</option>
+                    <option>Usman Tariq</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Product</label>
+                <select>
+                    <option>Wireless Headphones Pro — $89.99</option>
+                    <option>Running Shoes X200 — $59.99</option>
+                    <option>Smart Watch Series 5 — $199.99</option>
+                    <option>Mechanical Keyboard TKL — $129.99</option>
+                    <option>Cotton T-Shirt (Pack of 3) — $24.99</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" placeholder="1" min="1">
+            </div>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select>
+                    <option>Credit Card</option>
+                    <option>Debit Card</option>
+                    <option>Cash on Delivery</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Delivery Address</label>
+            <input type="text" placeholder="Enter delivery address">
+        </div>
+        <button class="form-btn">Place Order →</button>
+    </div>
 </div>
-
-<div class="api-section">
-  <div class="api-card">
-    <h3>🔌 REST API Endpoints — Order Service</h3>
-    <div class="api-endpoints">
-      <div class="endpoint"><span class="method get">GET</span><div class="endpoint-path">/api/orders</div><div class="endpoint-desc">Get all orders</div></div>
-      <div class="endpoint"><span class="method get">GET</span><div class="endpoint-path">/api/orders/:id</div><div class="endpoint-desc">Get single order</div></div>
-      <div class="endpoint"><span class="method post">POST</span><div class="endpoint-path">/api/orders</div><div class="endpoint-desc">Place new order</div></div>
-      <div class="endpoint"><span class="method put">PUT</span><div class="endpoint-path">/api/orders/:id</div><div class="endpoint-desc">Update order status</div></div>
-      <div class="endpoint"><span class="method delete">DELETE</span><div class="endpoint-path">/api/orders/:id</div><div class="endpoint-desc">Cancel order</div></div>
-      <div class="endpoint"><span class="method get">GET</span><div class="endpoint-path">/api/orders/user/:id</div><div class="endpoint-desc">Get orders by user</div></div>
-    </div>
-  </div>
-</div>
-
-<footer>
-  <p>ShopZone &copy; 2024 — Order Microservice | Port: 3003</p>
-  <p style="margin-top:0.5rem;"><a href="index.html">← Back to Home</a> | <a href="https://github.com/iffatbatool067/microservices-ecommerce">GitHub Repo</a></p>
-</footer>
-
+<footer><p>© 2025 <span>ShopCloud</span> | Order Service | COMSATS University Islamabad, Lahore Campus</p></footer>
 </body>
 </html>
