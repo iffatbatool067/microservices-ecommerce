@@ -14,43 +14,6 @@ A fully containerized, cloud-native e-commerce platform built with microservices
 - **GitHub:** https://github.com/iffatbatool067/microservices-ecommerce
 - **Docker Hub:** https://hub.docker.com/r/iffatbatool/shopcloud-frontend
 
----
-
-## Folder Structure
-microservices-ecommerce/
-├── .github/
-│   └── workflows/
-│       ├── ci-dev.yml           # CI pipeline for develop branch
-│       ├── cd-staging.yml       # CD pipeline for staging branch
-│       └── cd-production.yml    # CD pipeline for production branch
-├── src/
-│   ├── frontend/
-│   │   ├── index.html           # Home Page
-│   │   ├── user.html            # User Service Page
-│   │   ├── products.html        # Product Service Page
-│   │   ├── orders.html          # Order Service Page
-│   │   └── notifications.html   # Notification Service Page
-│   ├── user-service/
-│   │   └── index.js             # User microservice
-│   ├── product-service/
-│   │   └── index.js             # Product microservice
-│   ├── order-service/
-│   │   └── index.js             # Order microservice
-│   └── notification-service/
-│       └── index.js             # Notification microservice
-├── k8s/
-│   ├── frontend-deployment.yaml      # Kubernetes - Frontend
-│   ├── user-deployment.yaml          # Kubernetes - User Service
-│   ├── product-deployment.yaml       # Kubernetes - Product Service
-│   ├── order-deployment.yaml         # Kubernetes - Order Service
-│   └── notification-deployment.yaml  # Kubernetes - Notification Service
-├── Dockerfile                   # Docker config for frontend
-├── Jenkinsfile                  # Jenkins declarative pipeline
-├── .gitignore                   # Git ignore rules
-├── .dockerignore                # Docker ignore rules
-└── README.md                    # Project documentation
-
----
 
 ## Microservices
 | Service | Port | Description |
