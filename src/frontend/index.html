@@ -1,416 +1,139 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CloudMart | Microservices DevOps Project</title>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f6f8fb;
-      color: #1f2937;
-      line-height: 1.6;
-    }
-
-    .container {
-      width: 90%;
-      max-width: 1100px;
-      margin: auto;
-    }
-
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    nav {
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #0f172a;
-    }
-
-    .logo span {
-      color: #2563eb;
-    }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 25px;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: #374151;
-      font-weight: 600;
-      font-size: 15px;
-    }
-
-    .nav-links a:hover {
-      color: #2563eb;
-    }
-
-    .hero {
-      padding: 90px 0;
-      background: linear-gradient(135deg, #0f172a, #1e3a8a);
-      color: white;
-    }
-
-    .hero-content {
-      max-width: 720px;
-    }
-
-    .hero small {
-      color: #93c5fd;
-      font-weight: bold;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .hero h1 {
-      font-size: 52px;
-      line-height: 1.1;
-      margin: 15px 0 20px;
-    }
-
-    .hero p {
-      font-size: 18px;
-      color: #dbeafe;
-      margin-bottom: 30px;
-    }
-
-    .btn {
-      display: inline-block;
-      background: #2563eb;
-      color: white;
-      padding: 13px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .btn:hover {
-      background: #1d4ed8;
-    }
-
-    .section {
-      padding: 70px 0;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .section-title small {
-      color: #2563eb;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .section-title h2 {
-      font-size: 36px;
-      color: #0f172a;
-      margin-top: 10px;
-    }
-
-    .section-title p {
-      max-width: 650px;
-      margin: 10px auto 0;
-      color: #64748b;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    }
-
-    .card {
-      background: white;
-      padding: 28px;
-      border-radius: 16px;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 35px rgba(15, 23, 42, 0.10);
-    }
-
-    .card h3 {
-      color: #0f172a;
-      font-size: 21px;
-      margin-bottom: 12px;
-    }
-
-    .card p {
-      color: #64748b;
-      font-size: 15px;
-    }
-
-    .about {
-      background: white;
-    }
-
-    .about-box {
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 35px;
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 35px;
-      align-items: center;
-    }
-
-    .about-box h2 {
-      color: #0f172a;
-      font-size: 32px;
-      margin-bottom: 15px;
-    }
-
-    .about-box p {
-      color: #64748b;
-      margin-bottom: 18px;
-    }
-
-    .features {
-      list-style: none;
-    }
-
-    .features li {
-      padding: 10px 0;
-      border-bottom: 1px solid #e5e7eb;
-      color: #374151;
-      font-weight: 600;
-    }
-
-    .features li:last-child {
-      border-bottom: none;
-    }
-
-    .stack {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 14px;
-    }
-
-    .stack span {
-      background: white;
-      border: 1px solid #e5e7eb;
-      color: #0f172a;
-      padding: 12px 18px;
-      border-radius: 30px;
-      font-weight: bold;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
-    }
-
-    footer {
-      background: #0f172a;
-      color: #cbd5e1;
-      text-align: center;
-      padding: 25px;
-    }
-
-    footer strong {
-      color: white;
-    }
-
-    @media (max-width: 900px) {
-      .cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .about-box {
-        grid-template-columns: 1fr;
-      }
-
-      .hero h1 {
-        font-size: 40px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      nav {
-        height: auto;
-        padding: 18px 0;
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .nav-links {
-        gap: 14px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .hero {
-        padding: 65px 0;
-      }
-
-      .hero h1 {
-        font-size: 34px;
-      }
-
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .section-title h2 {
-        font-size: 28px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopCloud - E-Commerce Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; }
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: rgba(10,10,10,0.95);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 60px; border-bottom: 1px solid #222;
+        }
+        .logo { font-size: 26px; font-weight: 800; color: #6c63ff; }
+        .logo span { color: #fff; }
+        .nav-links a {
+            color: #ccc; text-decoration: none; margin-left: 30px; font-size: 15px;
+        }
+        .nav-links a:hover { color: #6c63ff; }
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 100px 20px 60px;
+        }
+        .hero h1 { font-size: 60px; font-weight: 900; margin-bottom: 20px; }
+        .hero h1 span { color: #6c63ff; }
+        .hero p { color: #aaa; font-size: 20px; max-width: 580px; margin: 0 auto 40px; line-height: 1.7; }
+        .hero-btns { display: flex; gap: 15px; justify-content: center; }
+        .btn-primary {
+            background: #6c63ff; color: #fff;
+            padding: 14px 32px; border-radius: 30px;
+            text-decoration: none; font-weight: 700; font-size: 15px;
+        }
+        .btn-outline {
+            border: 2px solid #6c63ff; color: #6c63ff;
+            padding: 14px 32px; border-radius: 30px;
+            text-decoration: none; font-weight: 700; font-size: 15px;
+        }
+        .btn-outline:hover { background: #6c63ff; color: #fff; }
+        .stats {
+            background: #111; padding: 60px 40px;
+            display: flex; justify-content: center; flex-wrap: wrap;
+            border-top: 1px solid #222; border-bottom: 1px solid #222;
+        }
+        .stat { text-align: center; padding: 20px 60px; border-right: 1px solid #222; }
+        .stat:last-child { border-right: none; }
+        .stat h3 { font-size: 40px; font-weight: 800; color: #6c63ff; }
+        .stat p { color: #888; font-size: 13px; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .services { padding: 80px 60px; }
+        .section-title { text-align: center; font-size: 38px; font-weight: 800; margin-bottom: 10px; }
+        .section-title span { color: #6c63ff; }
+        .section-sub { text-align: center; color: #888; margin-bottom: 50px; }
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px; max-width: 1100px; margin: 0 auto;
+        }
+        .card {
+            background: #111; border: 1px solid #222; border-radius: 16px;
+            padding: 30px; transition: all 0.3s;
+        }
+        .card:hover { border-color: #6c63ff; transform: translateY(-4px); }
+        .card-icon { font-size: 40px; margin-bottom: 15px; }
+        .card h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+        .card p { color: #888; font-size: 14px; line-height: 1.7; }
+        footer {
+            background: #111; border-top: 1px solid #222;
+            text-align: center; padding: 30px; color: #555; font-size: 14px;
+        }
+        footer span { color: #6c63ff; }
+    </style>
 </head>
-
 <body>
 
-  <header>
-    <div class="container">
-      <nav>
-        <div class="logo">Cloud<span>Mart</span></div>
-
-        <ul class="nav-links">
-          <li><a href="#services">Services</a></li>
-          <li><a href="#about">Project</a></li>
-          <li><a href="#stack">Stack</a></li>
-        </ul>
-      </nav>
+<nav>
+    <div class="logo">Shop<span>Cloud</span></div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="user.html">Users</a>
+        <a href="notifications.html">Notifications</a>
+        <a href="orders.html">Orders</a>
+        <a href="products.html">Products</a>
     </div>
-  </header>
+</nav>
 
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <small>Cloud Native DevOps Project</small>
-        <h1>E-Commerce Microservices Platform</h1>
-        <p>
-          A simple and professional frontend dashboard for an e-commerce
-          platform built with microservices, Docker, Kubernetes, and CI/CD automation.
-        </p>
-        <a href="#services" class="btn">View Services</a>
-      </div>
+<section class="hero">
+    <div>
+        <h1>Cloud-Native <span>E-Commerce</span> Platform<p>Microservices architecture </p></h1>
+        
+        <div class="hero-btns">
+            <a href="user.html" class="btn-primary">Get Started</a>
+            <a href="product.html" class="btn-outline">Browse Products</a>
+        </div>
     </div>
-  </section>
+</section>
 
-  <section id="services" class="section">
-    <div class="container">
-      <div class="section-title">
-        <small>Core Modules</small>
-        <h2>Microservices</h2>
-        <p>
-          The platform is divided into four main services to keep the system clean,
-          scalable, and easy to deploy.
-        </p>
-      </div>
+<section class="stats">
+    <div class="stat"><h3>1,200+</h3><p>Active Users</p></div>
+    <div class="stat"><h3>850+</h3><p>Products</p></div>
+    <div class="stat"><h3>3,400+</h3><p>Orders</p></div>
+    <div class="stat"><h3>99.9%</h3><p>Uptime</p></div>
+</section>
 
-      <div class="cards">
+<section class="services">
+    <h2 class="section-title">Our <span>Microservices</span></h2>
+    <p class="section-sub">Each service is independently containerized and deployable.</p>
+    <div class="grid">
         <div class="card">
-          <h3>User Service</h3>
-          <p>
-            Manages user registration, login, profiles, and authentication.
-          </p>
+            <div class="card-icon">👤</div>
+            <h3>User Service</h3>
+            <p>Registration, login, JWT authentication and profile management.</p>
         </div>
-
         <div class="card">
-          <h3>Product Service</h3>
-          <p>
-            Handles product catalog, product details, and inventory information.
-          </p>
+            <div class="card-icon">📦</div>
+            <h3>Product Service</h3>
+            <p>Product catalog, inventory management and CRUD operations.</p>
         </div>
-
         <div class="card">
-          <h3>Order Service</h3>
-          <p>
-            Processes customer orders and manages order status.
-          </p>
+            <div class="card-icon">🛍️</div>
+            <h3>Order Service</h3>
+            <p>Order processing, status tracking and payment integration.</p>
         </div>
-
         <div class="card">
-          <h3>Notification Service</h3>
-          <p>
-            Sends order confirmations, alerts, and system notifications.
-          </p>
+            <div class="card-icon">🔔</div>
+            <h3>Notification Service</h3>
+            <p>Email and in-app notifications for orders and account events.</p>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <section id="about" class="section about">
-    <div class="container">
-      <div class="about-box">
-        <div>
-          <h2>Project Overview</h2>
-          <p>
-            CloudMart represents a cloud-native e-commerce system designed using
-            DevOps practices. The website is containerized with Docker and deployed
-            through an automated CI/CD workflow.
-          </p>
-          <p>
-            The main goal is to demonstrate service-based architecture,
-            environment separation, and automated deployment.
-          </p>
-        </div>
-
-        <ul class="features">
-          <li>Docker based containerization</li>
-          <li>Kubernetes deployment support</li>
-          <li>Jenkins CI/CD pipeline</li>
-          <li>Development, staging, and production environments</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="stack" class="section">
-    <div class="container">
-      <div class="section-title">
-        <small>Technology</small>
-        <h2>DevOps Stack</h2>
-        <p>
-          Tools used to build, test, containerize, and deploy the project.
-        </p>
-      </div>
-
-      <div class="stack">
-        <span>HTML</span>
-        <span>CSS</span>
-        <span>GitHub</span>
-        <span>Docker</span>
-        <span>Kubernetes</span>
-        <span>Jenkins</span>
-        <span>CI/CD</span>
-        <span>Render</span>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <p><strong>CloudMart</strong> | Microservices DevOps Project</p>
-    <p>COMSATS University Islamabad, Lahore Campus</p>
-  </footer>
+<footer>
+    <p>© 2025 <span>ShopCloud</span> | DevOps Final Project | COMSATS University Islamabad, Lahore Campus</p>
+</footer>
 
 </body>
 </html>
