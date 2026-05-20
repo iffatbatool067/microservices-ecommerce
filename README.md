@@ -1,10 +1,6 @@
 ## Project Overview
 A fully containerized, cloud-native e-commerce platform built with microservices architecture, Docker, Kubernetes, Jenkins, and GitHub Actions CI/CD pipelines.
 
-**COMSATS University Islamabad, Lahore Campus**
-**Course:** Lab-DevOps for Cloud Computing | **Semester:** 6th | **Section:** C
-
----
 
 ## Team Members
 | Name | Roll Number | Role |
@@ -136,4 +132,4 @@ kubectl apply -f k8s/notification-deployment.yaml
 - **Git Flow** — Branching Strategy
 - **JWT** — Authentication
 - **RabbitMQ** — Message Queue
-EOF
+
